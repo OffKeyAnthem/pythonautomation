@@ -1,4 +1,4 @@
-#move PDFs out of Pictures and into a PDF folder in the Documents directory
+#move files out of one directory and into a folder specified by the user. The user can change the filetype in the moveFiles function.
 import sys
 import os
 import shutil
@@ -13,6 +13,7 @@ def moveFiles(src_dir):
         src_path = os.path.join(src_dir, file)
         dest_path = os.path.join(dest_dir, file)
 
+        #Here the user can change the file extension for the filetype they are trtying to move
         if file.endswith (".pdf"):
             shutil.move(src_path, dest_path)
     return dest_dir
@@ -24,6 +25,8 @@ def main():
 
     print("Do you want to change directories? Y/N")
     response = input()
+    
+    #'Y' if the user wants to change the current directory they are in. Copy and paste the path and it will be formatted correctly.
     if response == "Y":
         print("Enter the new directory path: ")
         new_dir = input().replace("\\", "/").strip('"').strip("'")
@@ -33,12 +36,14 @@ def main():
         print(f"Files Successfully moved to {dest_dir}")
         sys.exit()
 
+    #Keep same directory
     if response == "N":
         print(f"Continuing with current directory: {cur_dir}")
         dest_dir = moveFiles(cur_dir)
         print(f"Files Successfully moved to {dest_dir}")
         sys.exit()
 
+    #if response is not 'Y' or 'N' the script will close
     else:
         print("Invalid input, Closing script...")
         sys.exit()
