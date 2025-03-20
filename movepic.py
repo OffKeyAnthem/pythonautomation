@@ -1,34 +1,47 @@
 #move PDFs out of Pictures and into a PDF folder in the Documents directory
+import sys
 import os
 import shutil
 
-#Get current directory
-cur_dir = os.getcwd()
-print(f"Current directory: {cur_dir}")
+def moveFiles(src_dir):
+    #set new directory and destination directory for file transfer
+    print("Where would you like to move the files? Enter destination path: ")
+    dest_dir = input().replace("\\", "/").strip('"').strip("'")
 
-print("Do you want to change directories? Y/N")
-response = input()
-if response == "Y":
-    print("Enter the new directory path")
-    new_dir = input().replace("\\", "/")
-    os.chdir(new_dir)
-    print(f"Updated directory: {os.getcwd()}")
+    #go through each pic in Pictures and if it ends with .pdf move to new folder
+    for file in os.listdir():
+        src_path = os.path.join(src_dir, file)
+        dest_path = os.path.join(dest_dir, file)
 
-if response == "N":
-    new_dir = cur_dir
-    print(f"Continuing with current directory: {new_dir}")
+        if file.endswith (".pdf"):
+            shutil.move(src_path, dest_path)
+    return dest_dir
 
-else:
-    print("Invalid input, Closing script...")
-    exit()
+def main():
+    #Get current directory
+    cur_dir = os.getcwd()
+    print(f"Current directory: {cur_dir}")
 
-# #set new directory and destination directory for file transfer
-# dest_dir = "C:/Users/Anthem/Documents/pdffile"
+    print("Do you want to change directories? Y/N")
+    response = input()
+    if response == "Y":
+        print("Enter the new directory path: ")
+        new_dir = input().replace("\\", "/").strip('"').strip("'")
+        os.chdir(new_dir)
+        print(f"Updated directory: {os.getcwd()}")
+        dest_dir = moveFiles(new_dir)
+        print(f"Files Successfully moved to {dest_dir}")
+        sys.exit()
 
-# #go through each pic in Pictures and if it ends with .pdf move to new folder
-# for pic in os.listdir():
-#     source_path = os.path.join(new_dir, pic)
-#     dest_path = os.path.join(dest_dir, pic)
+    if response == "N":
+        print(f"Continuing with current directory: {cur_dir}")
+        dest_dir = moveFiles(cur_dir)
+        print(f"Files Successfully moved to {dest_dir}")
+        sys.exit()
 
-#     if pic.endswith (".pdf"):
-#         shutil.move(source_path, dest_path)
+    else:
+        print("Invalid input, Closing script...")
+        sys.exit()
+
+if __name__ == "__main__":
+    main()
